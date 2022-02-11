@@ -24,7 +24,7 @@ steps:
   inputs:
 #    provider: 'azurerm'
 #    command: 'init'
-#    workingDirectory: $(System.DefaultWorkingDirectory)/sait-test
+    workingDirectory: $(System.DefaultWorkingDirectory)/sait-test
     backendServiceArm: '$(subscription)'
     backendAzureRmResourceGroupName: $(resourceGroup)
     backendAzureRmStorageAccountName: $(storageAccount)
