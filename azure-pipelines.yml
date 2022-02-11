@@ -5,11 +5,11 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  subscription: its-sandbox-01(d27574d9-7c47-4dab-a1bc-3851bf7ac7b5)
+  subscription: First-Repo
   resourceGroup: rg-devops-sandbox-01
   storageAccount: devopsterraformsandbox
   container: tfstate
-  tfstateFile: terraform.tfstate
+  tfstateFile: 
   anyTfChanges: false
 
 steps:
