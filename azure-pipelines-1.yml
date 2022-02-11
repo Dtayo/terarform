@@ -1,0 +1,61 @@
+stages:
+- stage: validate
+  jobs:
+  - job: validate
+    continueOnError: false
+    steps:
+    - task: TerraformInstaller@0
+      displayname: 'install'
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV2@2
+      displayname: 'init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'its-sandbox-01(d27574d9-7c47-4dab-a1bc-3851bf7ac7b5)'
+        backendAzureRmResourceGroupName: 'rg-devops-sandbox-01'
+        backendAzureRmStorageAccountName: 'devopsterraformsandbox'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV2@2
+      displayname: 'validate'
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+- stage: deploy
+  jobs:
+  - deployment: deploy_terraform
+    continueOnError: false
+    environment:'dev'
+    strategy:
+     runOnce:
+      deploy:
+       steps:
+        - checkout: self
+        - task: TerraformInstaller@0
+          displayname: 'install'
+          inputs:
+            terraformVersion: 'latest'
+            - task: TerraformTaskV2@2
+              displayname: 'init'
+              inputs:
+                provider: 'azurerm'
+                command: 'init'
+                backendServiceArm: 'its-sandbox-01(d27574d9-7c47-4dab-a1bc-3851bf7ac7b5)'
+                backendAzureRmResourceGroupName: 'rg-devops-sandbox-01'
+                backendAzureRmStorageAccountName: 'devopsterraformsandbox'
+                backendAzureRmContainerName: 'tfstate'
+                backendAzureRmKey: 'terraform.tfstate'
+                - task: TerraformTaskV2@2
+                  displayname: 'plan'
+                  inputs:
+                    provider: 'azurerm'
+                    command: 'plan'
+                    environmentServiceNameAzureRM: 'its-sandbox-01(d27574d9-7c47-4dab-a1bc-3851bf7ac7b5)'
+                    - task: TerraformTaskV2@2
+                      displayname: 'apply'
+                      inputs:
+                        provider: 'azurerm'
+                        command: 'apply'
+                        environmentServiceNameAzureRM: 'its-sandbox-01(d27574d9-7c47-4dab-a1bc-3851bf7ac7b5)'
