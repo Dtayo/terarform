@@ -10,6 +10,6 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "resourcegroup-test-tbd-3"
+  name     = "rg-devops-sandbox-02"
   location = "canadacentral"
 }
